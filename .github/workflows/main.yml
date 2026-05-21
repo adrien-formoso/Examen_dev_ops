@@ -23,9 +23,15 @@ jobs:
         with:
           node-version: '22'
 
-      # 3. Installer les dépendances
+      # 3. Installer les dépendances du Backend
       - name: Installation des dépendances
+        working-directory: ./backend
         run: npm install
+
+      # 4. Lancer les tests du Backend
+      - name: Lancement des tests
+        working-directory: ./backend
+        run: npm test
 
       # 4. Lancer les tests
       - name: Lancement des tests
