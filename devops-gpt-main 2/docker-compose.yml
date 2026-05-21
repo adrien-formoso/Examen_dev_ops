@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # Service de cache Redis
+  cache:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  # Service Backend (API)
+  chat-api:
+    build: 
+      context: ./backend
+    ports:
+      - "3000:3000"
+    environment:
+      # URL pour que l'API puisse se connecter au cache via le réseau interne Docker
+      - REDIS_URL=redis://cache:6379 
+    depends_on:
+      - cache
+    restart: unless-stopped
+
+  # Service Frontend (Interface Utilisateur)
+  chat-ui:
+    build: 
+      context: ./frontend
+    ports:
+      - "5173:5173"
+    environment:
+      # URL pour que le frontend puisse contacter l'API (à adapter selon votre framework)
+      - VITE_API_URL=http://localhost:3000
+    depends_on:
+      - chat-api
+    restart: unless-stopped
