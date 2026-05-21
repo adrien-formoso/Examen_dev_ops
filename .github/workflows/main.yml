@@ -23,9 +23,23 @@ jobs:
         with:
           node-version: 22
 
-      # 3. Lancer la commande npm install
-      - name: Installation des dépendances
+      # 3. Lancer la commande npm install (pour le backend et le frontend)
+      - name: Installation des dépendances (Backend)
+        working-directory: ./backend
         run: npm install
+
+      - name: Installation des dépendances (Frontend)
+        working-directory: ./frontend
+        run: npm install
+
+      # 4. Lancer la commande npm test
+      - name: Exécution des tests (Backend)
+        working-directory: ./backend
+        run: npm test
+
+      - name: Exécution des tests (Frontend)
+        working-directory: ./frontend
+        run: npm test
 
       # 4. Lancer la commande npm test
       - name: Exécution des tests
