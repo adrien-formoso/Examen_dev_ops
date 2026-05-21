@@ -1,16 +1,16 @@
-name: CI/CD DevOpsGPT
+name: CI/CD Pipeline
 
-# Le workflow se déclenche sur la branche main ET lors de la création d'un tag commençant par 'v'
+# Déclencheurs (Triggers)
 on:
   push:
     branches:
       - main
     tags:
-      - 'v*'
+      - 'v*' 
 
 jobs:
   test-and-deploy:
-    runs-on: ubuntu-latest # Le job tourne sur la dernière version d'Ubuntu
+    runs-on: ubuntu-latest # Environnement demandé
 
     steps:
       # 1. Récupérer le code
@@ -21,31 +21,17 @@ jobs:
       - name: Configuration de Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: '22'
 
-      # 3. Lancer la commande npm install (pour le backend et le frontend)
-      - name: Installation des dépendances (Backend)
-        working-directory: ./backend
+      # 3. Installer les dépendances
+      - name: Installation des dépendances
         run: npm install
 
-      - name: Installation des dépendances (Frontend)
-        working-directory: ./frontend
-        run: npm install
-
-      # 4. Lancer la commande npm test
-      - name: Exécution des tests (Backend)
-        working-directory: ./backend
+      # 4. Lancer les tests
+      - name: Lancement des tests
         run: npm test
 
-      - name: Exécution des tests (Frontend)
-        working-directory: ./frontend
-        run: npm test
-
-      # 4. Lancer la commande npm test
-      - name: Exécution des tests
-        run: npm test
-
-      # 5. Simuler un déploiement UNIQUEMENT si le push est un tag
+      # 5. Déploiement conditionnel (uniquement si c'est un tag)
       - name: Déploiement
         if: startsWith(github.ref, 'refs/tags/v')
         run: echo "Déploiement en cours..."
